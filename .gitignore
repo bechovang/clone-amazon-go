@@ -1,0 +1,63 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.conda/
+.python-version
+
+# Environment/config files
+*.env
+*.env.*
+.env
+.env.local
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+.wheels/
+pip-wheel-metadata/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checkers and tooling caches
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+
+# IDE/editor
+.vscode/
+.idea/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+logs/
+.tmp/
+.cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Project-specific
+zone_config.json
+# Large model files (ignore if not tracking in Git)
+yolov8n.pt

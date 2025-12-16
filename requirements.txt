@@ -1,5 +1,1 @@
 paho-mqtt
-opencv-python 
-ultralytics 
-mediapipe==0.10.9
-hx711

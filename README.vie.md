@@ -16,11 +16,11 @@ Dự án dùng ESP32 + HX711 để đọc khối lượng và publish sự kiệ
 ## Sơ đồ đấu dây chi tiết
 
 ### 1) Nối HX711 ↔ ESP32 (logic)
-Các chân mặc định trong `weight_sensor_esp32/main.py` (và `use_weight.py`):
+Các chân mặc định trong `weight_sensor_esp32/main.py`:
 - ESP32 `3V3`  → HX711 `VCC`
 - ESP32 `GND`  → HX711 `GND`
-- ESP32 `GPIO25` → HX711 `DT` (hoặc `DOUT`)
-- ESP32 `GPIO26` → HX711 `SCK` (hoặc `PD_SCK`)
+- ESP32 `GPIO 25` → HX711 `DT` (hoặc `DOUT`)
+- ESP32 `GPIO 26` → HX711 `SCK` (hoặc `PD_SCK`)
 
 Ghi chú:
 - Dây càng ngắn càng ổn định, tránh nhiễu.
@@ -44,13 +44,12 @@ Nếu màu dây khác, hãy xem datasheet của load cell:
 
 Thư mục `weight_sensor_esp32/`:
 - `hx711.py`: driver HX711 cho MicroPython
-- `main.py`: publisher (Wi‑Fi + MQTT + HX711)
-- `use_weight.py`: biến thể publisher (tương tự `main.py`)
-- `calibrate.py`: hỗ trợ hiệu chuẩn (chạy qua Thonny, nhập liệu)
+- `main.py`: publisher (Wi‑Fi + MQTT + HX711) - **Script chính để chạy**
+- `calibrate.py`: hỗ trợ hiệu chuẩn (chạy qua Thonny/IDE MicroPython)
 - `boot.py`: script chạy khi boot (tùy chọn)
 
 ### Cấu hình Wi‑Fi/MQTT
-Sửa trong `weight_sensor_esp32/main.py` (hoặc `use_weight.py`):
+Sửa trong `weight_sensor_esp32/main.py`:
 - `WIFI_SSID`, `WIFI_PASSWORD`
 - `MQTT_BROKER` (mặc định: `test.mosquitto.org`)
 - `MQTT_CLIENT_ID` (chuỗi duy nhất)
@@ -66,7 +65,7 @@ Sửa trong `weight_sensor_esp32/main.py` (hoặc `use_weight.py`):
    - `VALUE_WITH_WEIGHT`
 4) Tính:
    - `RATIO = (VALUE_WITH_WEIGHT - TARE_VALUE) / KNOWN_WEIGHT_G`
-5) Ghi các giá trị vào `main.py`/`use_weight.py` (các hằng `TARE_VALUE`, `VALUE_WITH_WEIGHT`, `KNOWN_WEIGHT_G`, `RATIO`) rồi chạy.
+5) Ghi các giá trị vào `main.py` (các hằng `TARE_VALUE`, `VALUE_WITH_WEIGHT`, `KNOWN_WEIGHT_G`, `RATIO`) rồi chạy.
 
 ### Logic publish
 - Đọc nhiều mẫu và lấy median để ổn định.
@@ -118,11 +117,10 @@ clone-amazon-go/
   README.vie.md               # Tài liệu tiếng Việt (file này)
 
   weight_sensor_esp32/
-    boot.py
+    boot.py                   # Script boot tùy chọn
     hx711.py                  # Driver HX711 cho MicroPython
     calibrate.py              # Hiệu chuẩn (lấy TARE/WEIGHT)
-    main.py                   # ESP32 publisher (Wi‑Fi + MQTT + HX711)
-    use_weight.py             # Biến thể publisher
+    main.py                   # ESP32 publisher (Wi‑Fi + MQTT + HX711) - Script chính
 ```
 
 ---

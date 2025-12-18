@@ -3,9 +3,9 @@ from machine import Pin
 from hx711 import HX711
 import time
 
-# Cấu hình chân kết nối (thay đổi nếu cần)
-DT_PIN = 25   # D5 trên Arduino
-SCK_PIN = 26  # D4 trên Arduino
+# Cấu hình chân kết nối
+DT_PIN = 25   # ESP32 GPIO 25 → HX711 DT (DOUT)
+SCK_PIN = 26  # ESP32 GPIO 26 → HX711 SCK (PD_SCK)
 
 # Khởi tạo HX711
 hx = HX711(d_out=DT_PIN, pd_sck=SCK_PIN)

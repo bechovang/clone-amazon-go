@@ -1,0 +1,72 @@
+# File: auto_calibrate.py - Phiên bản tự động không cần input
+from machine import Pin
+from hx711 import HX711
+import time
+
+# Cấu hình chân kết nối (đã sửa theo cách kết nối của bạn)
+DT_PIN = 4   # ESP32 D4 → HX711 DT (DOUT)
+SCK_PIN = 5  # ESP32 D5 → HX711 SCK (PD_SCK)
+
+# Khởi tạo HX711
+hx = HX711(d_out=DT_PIN, pd_sck=SCK_PIN)
+
+print("🔧 BẮT ĐẦU HIỆU CHUẨN CÂN")
+print("Đang khởi tạo... Đợi 3 giây")
+time.sleep(3)
+
+# BƯỚC 1: Đo giá trị khi không có gì trên cân
+print("\n" + "="*40)
+print("BƯỚC 1: ĐANG ĐO GIÁ TRỊ BÌ (TARE)...")
+print("Đảm bảo cân trống!")
+
+tare_readings = []
+for i in range(5):
+    reading = hx.read()
+    tare_readings.append(reading)
+    print(f"Lần đo {i+1}: {reading}")
+    time.sleep(1)
+
+tare_value = sum(tare_readings) // len(tare_readings)
+print(f"📝 GIÁ TRỊ BÌ (TARE): {tare_value}")
+
+# BƯỚC 2: Đo giá trị khi có vật chuẩn
+print("\n" + "="*40)
+print("BƯỚC 2: ĐANG ĐO GIÁ TRỊ KHI CÓ VẬT...")
+print("Đặt vật có trọng lượng biết chính xác lên cân!")
+print("Ví dụ: chai nước 500ml = 500g")
+print("Chờ 10 giây để bạn đặt vật lên cân...")
+
+# Đợi 10 giây để người dùng đặt vật lên cân
+for i in range(10, 0, -1):
+    print(f"Còn {i} giây...")
+    time.sleep(1)
+
+weight_readings = []
+for i in range(5):
+    reading = hx.read()
+    weight_readings.append(reading)
+    print(f"Lần đo {i+1}: {reading}")
+    time.sleep(1)
+
+weight_value = sum(weight_readings) // len(weight_readings)
+print(f"📝 GIÁ TRỊ KHI CÓ VẬT: {weight_value}")
+
+print("\n" + "="*50)
+print("✅ HIỆU CHUẨN HOÀN TẤT!")
+print("Ghi lại 2 giá trị sau để dùng cho bước tiếp theo:")
+print(f"TARE_VALUE = {tare_value}")
+print(f"VALUE_WITH_WEIGHT = {weight_value}")
+print("="*50)
+
+# Tự động tạo file config với các giá trị đã hiệu chuẩn
+config_content = f"""# Cấu hình tự động tạo từ quá trình hiệu chuẩn
+TARE_VALUE = {tare_value}
+VALUE_WITH_WEIGHT = {weight_value}
+KNOWN_WEIGHT_G = 500  # Thay đổi nếu bạn dùng vật chuẩn khác
+RATIO = (VALUE_WITH_WEIGHT - TARE_VALUE) / KNOWN_WEIGHT_G
+"""
+
+with open('config.py', 'w') as f:
+    f.write(config_content)
+    
+print("Đã tạo file config.py với các giá trị hiệu chuẩn!")

@@ -13,11 +13,11 @@ This project uses an ESP32 with an HX711 load cell amplifier to detect weight ch
 ## Wiring Guide (Detailed)
 
 ### 1) HX711 to ESP32 (logic)
-Default pins used by the code (`weight_sensor_esp32/main.py` and `use_weight.py`):
+Default pins used by the code (`weight_sensor_esp32/main.py`):
 - ESP32 `3V3`  → HX711 `VCC`
 - ESP32 `GND`  → HX711 `GND`
-- ESP32 `GPIO25` → HX711 `DT` (a.k.a. `DOUT`)
-- ESP32 `GPIO26` → HX711 `SCK` (a.k.a. `PD_SCK`)
+- ESP32 `GPIO 25` → HX711 `DT` (a.k.a. `DOUT`)
+- ESP32 `GPIO 26` → HX711 `SCK` (a.k.a. `PD_SCK`)
 
 Notes:
 - Keep wires short and stable to reduce noise.
@@ -41,13 +41,12 @@ If wire colors differ, consult your load cell’s datasheet:
 
 Files under `weight_sensor_esp32/`:
 - `hx711.py`: HX711 MicroPython driver
-- `main.py`: Publisher (Wi‑Fi + MQTT + HX711)
-- `use_weight.py`: Alternate publisher (similar to `main.py`)
-- `calibrate.py`: Interactive calibration helper (serial input via Thonny)
+- `main.py`: Publisher (Wi‑Fi + MQTT + HX711) - **Main script to run**
+- `calibrate.py`: Interactive calibration helper (run via Thonny/MicroPython IDE)
 - `boot.py`: Optional boot script
 
 ### Configure Wi‑Fi/MQTT
-Edit in `weight_sensor_esp32/main.py` (or `use_weight.py`):
+Edit in `weight_sensor_esp32/main.py`:
 - `WIFI_SSID`, `WIFI_PASSWORD`
 - `MQTT_BROKER` (default: `test.mosquitto.org`)
 - `MQTT_CLIENT_ID` (any unique string)
@@ -61,9 +60,9 @@ Edit in `weight_sensor_esp32/main.py` (or `use_weight.py`):
 3. The script prints:
    - `TARE_VALUE`
    - `VALUE_WITH_WEIGHT`
-   - Put them (and your `KNOWN_WEIGHT_G`) into `main.py`/`use_weight.py` and compute:
+   - Put them (and your `KNOWN_WEIGHT_G`) into `main.py` and compute:
      - `RATIO = (VALUE_WITH_WEIGHT - TARE_VALUE) / KNOWN_WEIGHT_G`
-4. Save and run `main.py` (or `use_weight.py`) on the ESP32.
+4. Save and run `main.py` on the ESP32.
 
 ### Publishing Logic
 - Reads stable weight (median of multiple samples).
@@ -114,11 +113,10 @@ clone-amazon-go/
   README.md                   # This guide
 
   weight_sensor_esp32/
-    boot.py
+    boot.py                   # Optional boot script
     hx711.py                  # MicroPython HX711 driver
-    calibrate.py              # Interactive calibration (TARE/WEIGHT values)
-    main.py                   # ESP32 publisher (Wi‑Fi + MQTT + HX711)
-    use_weight.py             # Alternate publisher
+    calibrate.py              # Interactive calibration (get TARE/WEIGHT values)
+    main.py                   # ESP32 publisher (Wi‑Fi + MQTT + HX711) - Main script
 ```
 
 ---
